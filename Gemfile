@@ -7,5 +7,6 @@ gem "sinatra"
 group :development do
   gem "heroku"
   gem "jasmine"
+  gem "rspec"
   gem "sinatra-reloader"
 end
