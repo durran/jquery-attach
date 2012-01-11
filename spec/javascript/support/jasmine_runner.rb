@@ -6,14 +6,11 @@ require config_overrides if File.exist?(config_overrides)
 
 spec_builder = Jasmine::SpecBuilder.new(Jasmine::Config.new)
 
-should_stop = false
-
 Rspec::Runner.configure do |config|
   config.after(:suite) do
-    spec_builder.stop if should_stop
+    spec_builder.stop
   end
 end
 
 spec_builder.start
-should_stop = true
 spec_builder.declare_suites
