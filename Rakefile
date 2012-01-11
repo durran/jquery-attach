@@ -4,8 +4,7 @@ require "rspec/core/rake_task"
 load "jasmine/tasks/jasmine.rake"
 
 RSpec::Core::RakeTask.new(:jasmine_ci) do |t|
-  t.rspec_opts = ["--colour", "--format", "progress"]
-  t.verbose = true
+  t.rspec_opts = ["--colour", "--format", "documentation"]
   t.pattern = ["spec/javascript/support/jasmine_runner.rb"]
 end
 
