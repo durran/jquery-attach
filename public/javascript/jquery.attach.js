@@ -85,18 +85,18 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   Attach.Reader.prototype.read = function() {
     var reader = new FileReader();
     reader.readAsBinaryString(this.file());
-    reader.onprogress = readProgress;
-    reader.onload = readSuccess;
-    reader.onerror = readError;
+    reader.onprogress = Attach.readProgress;
+    reader.onload = Attach.readSuccess;
+    reader.onerror = Attach.readError;
   };
 
   /*
   * Handle errors that could have occured with the browser trying to read
   * the file.
   *
-  *   readError(event);
+  *   Attach.readError(event);
   */
-  var readError = function(event) {
+  Attach.readError = function(event) {
     console.log("Read file error!");
     console.log(event.target.error.name);
   };
@@ -104,9 +104,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   /*
   * Show the progress of the file that is being read.
   *
-  *   readProgress(event);
+  *   Attach.readProgress(event);
   */
-  var readProgress = function(event) {
+  Attach.readProgress = function(event) {
     if (event.lengthComputable) {
       var percentage = event.loaded / event.total;
       console.log(percentage);
@@ -116,9 +116,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   /*
   * Handle the finishing of the file read.
   *
-  *   readSuccess(event);
+  *   Attach.readSuccess(event);
   */
-  var readSuccess = function(event) {
+  Attach.readSuccess = function(event) {
     var uploader = new Attach.Uploader(event.target);
     console.log("Reading file success!");
     uploader.send();
@@ -151,9 +151,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   Attach.Uploader.prototype.send = function() {
     // var request = new XMLHttpRequest();
     // var upload = request.upload;
-    // upload.addEventListener("progress", sendProgress);
-    // upload.addEventListener("load", sendSuccess);
-    // upload.addEventListener("error", sendError);
+    // upload.addEventListener("progress", Attach.sendProgress);
+    // upload.addEventListener("load", Attach.sendSuccess);
+    // upload.addEventListener("error", Attach.sendError);
     // request.send(this.file());
   };
 
@@ -161,18 +161,18 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   * Handle errors that could have occured with the browser trying to send
   * the file.
   *
-  *   sendError(event);
+  *   Attach.sendError(event);
   */
-  var sendError = function(event) {
+  Attach.sendError = function(event) {
     console.log("Send file error!");
   };
 
   /*
   * Show the progress of the file that is being sent.
   *
-  *   sendProgress(event);
+  *   Attach.sendProgress(event);
   */
-  var sendProgress = function(event) {
+  Attach.sendProgress = function(event) {
     if (event.lengthComputable) {
       var percentage = event.loaded / event.total;
       console.log(percentage);
@@ -182,9 +182,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   /*
   * Handle the finishing of the file send.
   *
-  *   sendSuccess(event);
+  *   Attach.sendSuccess(event);
   */
-  var sendSuccess = function(event) {
+  Attach.sendSuccess = function(event) {
     console.log("Sending file success!");
   };
 
