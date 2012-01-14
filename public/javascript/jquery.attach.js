@@ -67,6 +67,16 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     this._file = file;
   };
 
+  /* Attach the progress, success, and error events to the reader.
+  *
+  *   reader.attachEvents(reader);
+  */
+  Attach.Reader.prototype.attachEvents = function(reader) {
+    reader.onprogress = Attach.readProgress;
+    reader.onload = Attach.readSuccess;
+    reader.onerror = Attach.readError;
+  };
+
   /*
   * Get the file object from the Attach.Reader.
   *
@@ -85,9 +95,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   Attach.Reader.prototype.read = function() {
     var reader = new FileReader();
     reader.readAsBinaryString(this.file());
-    reader.onprogress = Attach.readProgress;
-    reader.onload = Attach.readSuccess;
-    reader.onerror = Attach.readError;
+    this.attachEvents(reader);
   };
 
   /*
@@ -131,7 +139,18 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   *   var uploader = new Attach.Uploader(target);
   */
   Attach.Uploader = function(target) {
-    this._file = target.file;
+    this._file = target.result;
+  };
+
+  /* Attach the progress, success, and error events to the xhr upload.
+  *
+  *   uploader.attachEvents(request);
+  */
+  Attach.Uploader.prototype.attachEvents = function(request) {
+    var upload = request.upload;
+    upload.addEventListener("progress", Attach.sendProgress);
+    upload.addEventListener("load", Attach.sendSuccess);
+    upload.addEventListener("error", Attach.sendError);
   };
 
   /*
@@ -143,18 +162,30 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     return this._file;
   };
 
+  /* Prepare the xhr for sending.
+  *
+  *   uploader.prepareRequest(request);
+  */
+  Attach.Uploader.prototype.prepareRequest = function(request, file) {
+    var form = $("form");
+    var method = form.attr("method");
+    var url = form.attr("action");
+    request.open(method, url);
+    request.setRequestHeader("Cache-Control", "no-cache");
+    request.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+    request.setRequestHeader("X-File-Name", this.file().name);
+  };
+
   /*
   * Send the file to the server via xhr.
   *
   *   uploader.send();
   */
   Attach.Uploader.prototype.send = function() {
-    // var request = new XMLHttpRequest();
-    // var upload = request.upload;
-    // upload.addEventListener("progress", Attach.sendProgress);
-    // upload.addEventListener("load", Attach.sendSuccess);
-    // upload.addEventListener("error", Attach.sendError);
-    // request.send(this.file());
+    var request = new XMLHttpRequest();
+    this.attachEvents(request);
+    this.prepareRequest(request);
+    request.send(this.file());
   };
 
   /*
