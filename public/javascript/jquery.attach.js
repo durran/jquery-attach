@@ -87,6 +87,15 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   };
 
   /*
+  * Get the file name from the Attach.Reader.
+  *
+  *   reader.fileName();
+  */
+  Attach.Reader.prototype.fileName = function() {
+    return this.file().name;
+  };
+
+  /*
   * Read the file from the user into the browser and depending on
   * the events, can error or send to the server.
   *
@@ -105,8 +114,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   *   Attach.readError(event);
   */
   Attach.readError = function(event) {
-    console.log("Read file error!");
-    console.log(event.target.error.name);
   };
 
   /*
@@ -117,7 +124,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   Attach.readProgress = function(event) {
     if (event.lengthComputable) {
       var percentage = event.loaded / event.total;
-      console.log(percentage);
     }
   };
 
@@ -128,7 +134,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   */
   Attach.readSuccess = function(event) {
     var uploader = new Attach.Uploader(event.target);
-    console.log("Reading file success!");
     uploader.send();
   };
 
@@ -166,14 +171,15 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   *
   *   uploader.prepareRequest(request);
   */
-  Attach.Uploader.prototype.prepareRequest = function(request, file) {
+  Attach.Uploader.prototype.prepareRequest = function(request) {
     var form = $("form");
     var method = form.attr("method");
     var url = form.attr("action");
+    var reader = Attach.readers.pop();
     request.open(method, url);
     request.setRequestHeader("Cache-Control", "no-cache");
     request.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-    request.setRequestHeader("X-File-Name", this.file().name);
+    request.setRequestHeader("X-File-Name", reader.fileName());
   };
 
   /*
@@ -195,7 +201,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   *   Attach.sendError(event);
   */
   Attach.sendError = function(event) {
-    console.log("Send file error!");
   };
 
   /*
@@ -206,7 +211,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   Attach.sendProgress = function(event) {
     if (event.lengthComputable) {
       var percentage = event.loaded / event.total;
-      console.log(percentage);
     }
   };
 
@@ -216,7 +220,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   *   Attach.sendSuccess(event);
   */
   Attach.sendSuccess = function(event) {
-    console.log("Sending file success!");
   };
 
 })(jQuery);
