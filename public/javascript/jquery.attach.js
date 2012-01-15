@@ -38,30 +38,34 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   Attach.CACHE_CONTROL = "Cache-Control";
 
   /*
-  * Requested with header constant.
-  */
-  Attach.REQUESTED_WITH = "X-Requested-With";
-
-  /*
   * File name header constant.
   */
   Attach.FILE_NAME = "X-File-Name";
 
   /*
+  * Form submit method constant.
+  */
+  Attach.METHOD = "POST";
+
+  /*
+  * Requested with header constant.
+  */
+  Attach.REQUESTED_WITH = "X-Requested-With";
+
+  /*
   * Designate a file upload field as attachable.
   *
-  *   $("#upload").attach();
+  *   $("#upload").attach({ url: "/upload" });
   */
-  $.fn.attach = function() {
+  $.fn.attach = function(options) {
     $(this).each(function(index, element) {
       $(element).change(function(event) {
-
         // Clear out all the existing readers.
         Attach.readers.length = 0;
 
         // Create a new reader for each file and add it to the stack.
         $(element.files).each(function(i, file) {
-          Attach.readers.push(new Attach.Reader(file));
+          Attach.readers.push(new Attach.Reader(file, options.url));
         });
 
         // For each reader read the file.
@@ -76,10 +80,11 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   * The Attach.Reader is the object that is responsible for sending the file
   * to the server, altering the HTML, and reporting the progress.
   *
-  *   var reader = new Attach.Reader(file);
+  *   var reader = new Attach.Reader(file, url);
   */
-  Attach.Reader = function(file) {
+  Attach.Reader = function(file, url) {
     this._file = file;
+    this._url = url;
     Attach.createProgressContainer(this.fileName());
   };
 
@@ -121,6 +126,15 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     var reader = new FileReader();
     reader.readAsBinaryString(this.file());
     this.attachEvents(reader);
+  };
+
+  /*
+  * Get the url object from the Attach.Reader.
+  *
+  *   reader.url();
+  */
+  Attach.Reader.prototype.url = function() {
+    return this._url;
   };
 
   /* Create the containing div for the progress bar.
@@ -197,11 +211,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   *   uploader.prepareRequest(request);
   */
   Attach.Uploader.prototype.prepareRequest = function(request) {
-    var form = $("form");
-    var method = form.attr("method");
-    var url = form.attr("action");
     var reader = Attach.readers.pop();
-    request.open(method, url);
+    request.open(Attach.METHOD, reader.url());
     request.setRequestHeader(Attach.CACHE_CONTROL, "no-cache");
     request.setRequestHeader(Attach.REQUESTED_WITH, "XMLHttpRequest");
     request.setRequestHeader(Attach.FILE_NAME, reader.fileName());

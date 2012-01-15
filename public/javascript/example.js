@@ -1,4 +1,4 @@
 $(function() {
 
-  $("#upload").attach();
+  $("#upload").attach({ url: "/upload" });
 });
