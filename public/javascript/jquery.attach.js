@@ -33,6 +33,21 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   Attach.readers = [];
 
   /*
+  * Cache control constant.
+  */
+  Attach.CACHE_CONTROL = "Cache-Control";
+
+  /*
+  * Requested with header constant.
+  */
+  Attach.REQUESTED_WITH = "X-Requested-With";
+
+  /*
+  * File name header constant.
+  */
+  Attach.FILE_NAME = "X-File-Name";
+
+  /*
   * Designate a file upload field as attachable.
   *
   *   $("#upload").attach();
@@ -65,6 +80,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   */
   Attach.Reader = function(file) {
     this._file = file;
+    Attach.createProgressContainer(this.fileName());
   };
 
   /* Attach the progress, success, and error events to the reader.
@@ -105,6 +121,15 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     var reader = new FileReader();
     reader.readAsBinaryString(this.file());
     this.attachEvents(reader);
+  };
+
+  /* Create the containing div for the progress bar.
+  *
+  *   Attach.createProgressContainer();
+  */
+  Attach.createProgressContainer = function(fileName) {
+    var progressBar = $("<div>").attr("id", "progress").html(fileName);
+    $(":first :file").after(progressBar);
   };
 
   /*
@@ -177,9 +202,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     var url = form.attr("action");
     var reader = Attach.readers.pop();
     request.open(method, url);
-    request.setRequestHeader("Cache-Control", "no-cache");
-    request.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-    request.setRequestHeader("X-File-Name", reader.fileName());
+    request.setRequestHeader(Attach.CACHE_CONTROL, "no-cache");
+    request.setRequestHeader(Attach.REQUESTED_WITH, "XMLHttpRequest");
+    request.setRequestHeader(Attach.FILE_NAME, reader.fileName());
   };
 
   /*

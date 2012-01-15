@@ -7,7 +7,8 @@ get "/" do
 end
 
 post "/upload" do
-  name = env["HTTP_X_FILE_NAME"]
-  file = request.body
-  data = file.read
+  env["HTTP_X_FILE_NAME"].tap do
+    file = request.body
+    data = file.read
+  end
 end
