@@ -75,6 +75,13 @@ describe("jquery Attach", function() {
       });
     });
 
+    describe("#fileName", function() {
+
+      it("returns the file name", function() {
+        expect(reader.fileName()).toEqual(file.name);
+      });
+    });
+
     describe("#url", function() {
 
       it("returns the url", function() {
