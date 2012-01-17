@@ -3,6 +3,14 @@ require("/javascripts/jquery.attach.js");
 
 describe("jquery Attach", function() {
 
+  var file;
+  var url;
+
+  beforeEach(function() {
+    file = new StubFile("file.txt");
+    url = "/upload";
+  });
+
   describe("Attach.readers", function() {
 
     it("defaults to an empty array", function() {
@@ -43,14 +51,10 @@ describe("jquery Attach", function() {
 
   describe("Attach.Reader", function() {
 
-    var file;
     var reader;
-    var url;
 
     beforeEach(function() {
-      file = new StubFile("file.txt");
       reader = new Attach.Reader(file, url);
-      url = "/upload";
     });
 
     describe("#new", function() {
@@ -59,7 +63,7 @@ describe("jquery Attach", function() {
         expect(reader._file).toEqual(file);
       });
 
-      it("sets the file", function() {
+      it("sets the url", function() {
         expect(reader._url).toEqual(url);
       });
     });
@@ -75,6 +79,31 @@ describe("jquery Attach", function() {
 
       it("returns the url", function() {
         expect(reader.url()).toEqual(url);
+      });
+    });
+  });
+
+  describe("Attach.Uploader", function() {
+
+    var uploader;
+    var event;
+
+    beforeEach(function() {
+      event = new StubEvent(file);
+      uploader = new Attach.Uploader(event);
+    });
+
+    describe("#new", function() {
+
+      it("sets the file", function() {
+        expect(uploader._file).toEqual(file);
+      });
+    });
+
+    describe("#file", function() {
+
+      it("returns the file", function() {
+        expect(uploader.file()).toEqual(file);
       });
     });
   });
