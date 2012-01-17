@@ -40,4 +40,42 @@ describe("jquery Attach", function() {
       });
     });
   });
+
+  describe("Attach.Reader", function() {
+
+    var file;
+    var reader;
+    var url;
+
+    beforeEach(function() {
+      file = "file.txt";
+      reader = new Attach.Reader(file, url);
+      url = "/upload";
+    });
+
+    describe("#new", function() {
+
+      it("sets the file", function() {
+        expect(reader._file).toEqual(file);
+      });
+
+      it("sets the file", function() {
+        expect(reader._url).toEqual(url);
+      });
+    });
+
+    describe("#file", function() {
+
+      it("returns the file", function() {
+        expect(reader.file()).toEqual(file);
+      });
+    });
+
+    describe("#url", function() {
+
+      it("returns the url", function() {
+        expect(reader.url()).toEqual(url);
+      });
+    });
+  });
 });
