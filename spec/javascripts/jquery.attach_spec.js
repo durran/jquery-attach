@@ -48,7 +48,7 @@ describe("jquery Attach", function() {
     var url;
 
     beforeEach(function() {
-      file = "file.txt";
+      file = new StubFile("file.txt");
       reader = new Attach.Reader(file, url);
       url = "/upload";
     });
