@@ -22,9 +22,13 @@ LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
-;(function($) {
 
-  var Attach = {};
+/*
+* Keep a reference to the Attach module in the global namespace.
+*/
+var Attach = {};
+
+;(function($) {
 
   /*
   * The current active readers reside in this variable until
