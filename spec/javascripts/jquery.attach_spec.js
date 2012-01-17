@@ -82,6 +82,21 @@ describe("jquery Attach", function() {
       });
     });
 
+    describe("#read", function() {
+
+      var fileReader;
+
+      beforeEach(function() {
+        fileReader = new FileReader();
+        spyOn(fileReader, "readAsBinaryString");
+      });
+
+      it("reads the file", function() {
+        reader.read(fileReader);
+        expect(fileReader.readAsBinaryString).toHaveBeenCalledWith(file);
+      });
+    });
+
     describe("#url", function() {
 
       it("returns the url", function() {

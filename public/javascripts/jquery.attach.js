@@ -74,7 +74,7 @@ var Attach = {};
 
         // For each reader read the file.
         $(Attach.readers).each(function(i, reader) {
-          reader.read();
+          reader.read(new FileReader());
         });
       });
     });
@@ -124,10 +124,9 @@ var Attach = {};
   * Read the file from the user into the browser and depending on
   * the events, can error or send to the server.
   *
-  *   reader.read();
+  *   reader.read(new FileReader());
   */
-  Attach.Reader.prototype.read = function() {
-    var reader = new FileReader();
+  Attach.Reader.prototype.read = function(reader) {
     reader.readAsBinaryString(this.file());
     this.attachEvents(reader);
   };
