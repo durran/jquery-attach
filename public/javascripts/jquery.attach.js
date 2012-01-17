@@ -176,7 +176,7 @@ var Attach = {};
   */
   Attach.readSuccess = function(event) {
     var uploader = new Attach.Uploader(event.target);
-    uploader.send();
+    uploader.send(new XMLHttpRequest());
   };
 
   /*
@@ -224,10 +224,9 @@ var Attach = {};
   /*
   * Send the file to the server via xhr.
   *
-  *   uploader.send();
+  *   uploader.send(new XmlHttpRequest());
   */
-  Attach.Uploader.prototype.send = function() {
-    var request = new XMLHttpRequest();
+  Attach.Uploader.prototype.send = function(request) {
     this.attachEvents(request);
     this.prepareRequest(request);
     request.send(this.file());

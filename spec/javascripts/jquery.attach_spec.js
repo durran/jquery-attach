@@ -128,5 +128,28 @@ describe("jquery Attach", function() {
         expect(uploader.file()).toEqual(file);
       });
     });
+
+    describe("#send", function() {
+
+      var request;
+      var reader;
+
+      beforeEach(function() {
+        reader = new Attach.Reader(file, url);
+        Attach.readers.push(reader);
+        request = new XMLHttpRequest();
+        spyOn(request, "send");
+      });
+
+      it("reads the file", function() {
+        uploader.send(request);
+        expect(request.send).toHaveBeenCalledWith(file);
+      });
+
+      it("pops the reader off the stack", function() {
+        uploader.send(request);
+        expect(Attach.readers.length).toEqual(0);
+      });
+    });
   });
 });
