@@ -82,6 +82,20 @@ var Attach = {};
   Attach.REQUESTED_WITH = "X-Requested-With";
 
   /*
+  * The initial template that gets added to the DOM when the progress
+  * bar container is first rendered.
+  */
+  Attach.TEMPLATE =
+    "<div id='jquery-attach-progress'>" +
+      "<div id='jquery-attach-progress-bar-container'>" +
+        "<div id='jquery-attach-progress-bar'>" +
+          "<div id='jquery-attach-progress-bar-background'/>" +
+        "</div>" +
+      "</div>" +
+      "<div id='jquery-attach-progress-event'/>" +
+    "</div>"
+
+  /*
   * Designate a file upload field as attachable.
   *
   *   $("#upload").attach({ url: "/upload" });
@@ -114,7 +128,7 @@ var Attach = {};
   Attach.Reader = function(file, url) {
     this._file = file;
     this._url = url;
-    Attach.createProgressContainer(this.fileName());
+    Attach.createProgressContainer();
   };
 
   /* Attach the progress, success, and error events to the reader.
@@ -154,7 +168,6 @@ var Attach = {};
   Attach.Reader.prototype.read = function(reader) {
     reader.readAsBinaryString(this.file());
     this.attachEvents(reader);
-    Attach.createProgressBar();
   };
 
   /*
@@ -166,23 +179,12 @@ var Attach = {};
     return this._url;
   };
 
-  Attach.createProgressBar = function() {
-    var container = $("#" + Attach.PROGRESS_BAR_CONTAINER);
-    var bar = $("<div>").attr("id", Attach.PROGRESS_BAR);
-    var barBackground = $("<div>").attr("id", Attach.PROGRESS_BAR_BG);
-    bar.html(barBackground);
-    container.html(bar);
-  }
-
   /* Create the containing div for the progress bar.
   *
   *   Attach.createProgressContainer();
   */
   Attach.createProgressContainer = function() {
-    var container = $("<div>").attr("id", Attach.PROGRESS_DIV);
-    var barContainer = $("<div>").attr("id",Attach.PROGRESS_BAR_CONTAINER);
-    container.html(barContainer);
-    $(":first :file").after(container);
+    $(":first :file").after(Attach.TEMPLATE);
   };
 
   /*
