@@ -52,6 +52,31 @@ var Attach = {};
   Attach.METHOD = "POST";
 
   /*
+  * The id of the progress bar.
+  */
+  Attach.PROGRESS_BAR = "jquery-attach-progress-bar";
+
+  /*
+  * The id of the progress bar container.
+  */
+  Attach.PROGRESS_BAR_CONTAINER = "jquery-attach-progress-bar-container";
+
+  /*
+  * The background div for the progress bar.
+  */
+  Attach.PROGRESS_BAR_BG = "jquery-attach-progress-bar-background";
+
+  /*
+  * The id of the progress bar container div.
+  */
+  Attach.PROGRESS_DIV = "jquery-attach-progress";
+
+  /*
+  * The id of the div for the current event that is processing.
+  */
+  Attach.PROGRESS_EVENT = "jquery-attach-progress-event";
+
+  /*
   * Requested with header constant.
   */
   Attach.REQUESTED_WITH = "X-Requested-With";
@@ -129,6 +154,7 @@ var Attach = {};
   Attach.Reader.prototype.read = function(reader) {
     reader.readAsBinaryString(this.file());
     this.attachEvents(reader);
+    Attach.createProgressBar();
   };
 
   /*
@@ -140,13 +166,23 @@ var Attach = {};
     return this._url;
   };
 
+  Attach.createProgressBar = function() {
+    var container = $("#" + Attach.PROGRESS_BAR_CONTAINER);
+    var bar = $("<div>").attr("id", Attach.PROGRESS_BAR);
+    var barBackground = $("<div>").attr("id", Attach.PROGRESS_BAR_BG);
+    bar.html(barBackground);
+    container.html(bar);
+  }
+
   /* Create the containing div for the progress bar.
   *
   *   Attach.createProgressContainer();
   */
-  Attach.createProgressContainer = function(fileName) {
-    var progressBar = $("<div>").attr("id", "progress").html(fileName);
-    $(":first :file").after(progressBar);
+  Attach.createProgressContainer = function() {
+    var container = $("<div>").attr("id", Attach.PROGRESS_DIV);
+    var barContainer = $("<div>").attr("id",Attach.PROGRESS_BAR_CONTAINER);
+    container.html(barContainer);
+    $(":first :file").after(container);
   };
 
   /*
