@@ -2,10 +2,14 @@
   %head
     %title jquery.attach
     %link(rel="stylesheet" href="/stylesheets/jquery.attach.css")
+    %link(rel="stylesheet" href="/stylesheets/example.css")
     %script(type="text/javascript" src="/javascripts/jquery-1.7.1.min.js")
     %script(type="text/javascript" src="/javascripts/jquery.attach.js")
     %script(type="text/javascript" src="/javascripts/example.js")
 
 %body
-  %form#example(name="example" enctype="multipart/form-data" method="post" action="/upload")
-    %input#upload(type="file" name="upload")
+  %center
+    %form#example(name="example" enctype="multipart/form-data" method="post" action="/upload")
+      %button#file_select(type="button")
+        Select File
+      %input#upload(type="file" name="upload")
