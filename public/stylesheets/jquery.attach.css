@@ -26,15 +26,14 @@
 
 #jquery-attach-progress-bar {
   background: none repeat scroll 0 0 #338FCE;
-  background-color: #8DBAD6;
+  background-color: #CCCCCC;
   border: 1px solid #1A74B0;
-  border-color: #0D5E94;
+  border-color: #333333;
   height: 15px;
   left: 0;
   margin: -1px;
   position: absolute;
   top: 0;
-  width: 50%;
 }
 
 #jquery-attach-progress-bar-container {

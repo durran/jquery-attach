@@ -1,5 +1,6 @@
 require "sinatra"
 require "haml"
+require "json"
 require "sinatra/reloader" if development?
 
 get "/" do
@@ -7,8 +8,6 @@ get "/" do
 end
 
 post "/upload" do
-  env["HTTP_X_FILE_NAME"].tap do
-    file = request.body
-    data = file.read
-  end
+  content_type :json
+  { filename: env["HTTP_X_FILE_NAME"] }.to_json
 end

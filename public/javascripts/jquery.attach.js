@@ -168,6 +168,7 @@ var Attach = {};
   Attach.Reader.prototype.read = function(reader) {
     reader.readAsBinaryString(this.file());
     this.attachEvents(reader);
+    $("#" + Attach.PROGRESS_EVENT).html("Reading: " + this.fileName());
   };
 
   /*
@@ -184,6 +185,7 @@ var Attach = {};
   *   Attach.createProgressContainer();
   */
   Attach.createProgressContainer = function() {
+    $("#" + Attach.PROGRESS_DIV).remove();
     $(":first :file").after(Attach.TEMPLATE);
   };
 
@@ -204,6 +206,7 @@ var Attach = {};
   Attach.readProgress = function(event) {
     if (event.lengthComputable) {
       var percentage = event.loaded / event.total;
+      $("#" + Attach.PROGRESS_BAR).width(percentage + "%");
     }
   };
 
@@ -213,6 +216,7 @@ var Attach = {};
   *   Attach.readSuccess(event);
   */
   Attach.readSuccess = function(event) {
+    $("#" + Attach.PROGRESS_BAR).width("100%");
     var uploader = new Attach.Uploader(event.target);
     uploader.send(new XMLHttpRequest());
   };
@@ -236,6 +240,7 @@ var Attach = {};
     upload.addEventListener("progress", Attach.sendProgress);
     upload.addEventListener("load", Attach.sendSuccess);
     upload.addEventListener("error", Attach.sendError);
+    request.onreadystatechange = Attach.requestHandler;
   };
 
   /*
@@ -247,16 +252,26 @@ var Attach = {};
     return this._file;
   };
 
+  /*
+  * Get the name of the file being uploaded.
+  *
+  *   uploader.fileName();
+  */
+  Attach.Uploader.prototype.fileName = function() {
+    return this._fileName;
+  };
+
   /* Prepare the xhr for sending.
   *
   *   uploader.prepareRequest(request);
   */
   Attach.Uploader.prototype.prepareRequest = function(request) {
     var reader = Attach.readers.pop();
+    this._fileName = reader.fileName();
     request.open(Attach.METHOD, reader.url());
     request.setRequestHeader(Attach.CACHE_CONTROL, "no-cache");
     request.setRequestHeader(Attach.REQUESTED_WITH, "XMLHttpRequest");
-    request.setRequestHeader(Attach.FILE_NAME, reader.fileName());
+    request.setRequestHeader(Attach.FILE_NAME, this.fileName());
   };
 
   /*
@@ -267,6 +282,7 @@ var Attach = {};
   Attach.Uploader.prototype.send = function(request) {
     this.attachEvents(request);
     this.prepareRequest(request);
+    $("#" + Attach.PROGRESS_EVENT).html("Sending: " + this.fileName());
     request.send(this.file());
   };
 
@@ -287,6 +303,7 @@ var Attach = {};
   Attach.sendProgress = function(event) {
     if (event.lengthComputable) {
       var percentage = event.loaded / event.total;
+      $("#" + Attach.PROGRESS_BAR).width(percentage + "%");
     }
   };
 
@@ -296,6 +313,17 @@ var Attach = {};
   *   Attach.sendSuccess(event);
   */
   Attach.sendSuccess = function(event) {
+    $("#" + Attach.PROGRESS_BAR).width("100%");
+  };
+
+  /*
+  * Handle state changes in the request, if finished set the success message.
+  */
+  Attach.requestHandler = function() {
+    if (this.readyState == this.DONE) {
+      var response = JSON.parse(this.response);
+      $("#" + Attach.PROGRESS_EVENT).html("Success: " + response.filename);
+    }
   };
 
 })(jQuery);
