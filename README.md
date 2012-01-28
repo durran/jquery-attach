@@ -1,4 +1,5 @@
-This is a work in progress, just a spike for now.
+Upload files using JQuery, the File API, and XMLHTTPRequests. This currently will
+only work in Firefox and Chrome.
 
 Development Setup
 =================
@@ -13,3 +14,13 @@ Running the Example
 Running Specs
 =============
 - `evergreen serve`
+
+Demo
+====
+[JQuery.attach](http://jquery-attach.heroku.com)
+
+Requirements
+============
+- JQuery 1.7.1+
+- Firefox 9
+- Chrome 16
