@@ -196,6 +196,11 @@ var Attach = {};
   *   Attach.readError(event);
   */
   Attach.readError = function(event) {
+    $("#" + Attach.PROGRESS_BAR).width("100%")
+      .css("background-color", "#FF3333")
+      .css("border-color", "#CC0033");
+    $("#" + Attach.PROGRESS_BAR_BG).css("background-image", "none");
+    $("#" + Attach.PROGRESS_EVENT).html("Error reading file");
   };
 
   /*
@@ -293,6 +298,11 @@ var Attach = {};
   *   Attach.sendError(event);
   */
   Attach.sendError = function(event) {
+    $("#" + Attach.PROGRESS_BAR).width("100%")
+      .css("background-color", "#FF3333")
+      .css("border-color", "#CC0033");
+    $("#" + Attach.PROGRESS_BAR_BG).css("background-image", "none");
+    $("#" + Attach.PROGRESS_EVENT).html("Error sending file");
   };
 
   /*
@@ -313,7 +323,10 @@ var Attach = {};
   *   Attach.sendSuccess(event);
   */
   Attach.sendSuccess = function(event) {
-    $("#" + Attach.PROGRESS_BAR).width("100%");
+    $("#" + Attach.PROGRESS_BAR).width("100%")
+      .css("background-color", "#00FF99")
+      .css("border-color", "#006633");
+    $("#" + Attach.PROGRESS_BAR_BG).css("background-image", "none");
   };
 
   /*
@@ -321,8 +334,10 @@ var Attach = {};
   */
   Attach.requestHandler = function() {
     if (this.readyState == this.DONE) {
-      var response = JSON.parse(this.response);
-      $("#" + Attach.PROGRESS_EVENT).html("Success: " + response.filename);
+      if (this.status == 200) {
+        var response = JSON.parse(this.response);
+        $("#" + Attach.PROGRESS_EVENT).html("Success: " + response.filename);
+      }
     }
   };
 
