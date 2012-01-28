@@ -180,7 +180,8 @@ var Attach = {};
     return this._url;
   };
 
-  /* Create the containing div for the progress bar.
+  /*
+  * Create the containing div for the progress bar.
   *
   *   Attach.createProgressContainer();
   */
@@ -190,16 +191,37 @@ var Attach = {};
   };
 
   /*
+  * Handle common error handling style changes.
+  *
+  *   Attach.error();
+  */
+  Attach.error = function() {
+    $("#" + Attach.PROGRESS_BAR).width("100%")
+      .css("background-color", "#FF3333")
+      .css("border-color", "#CC0033");
+    $("#" + Attach.PROGRESS_BAR_BG).css("background-image", "none");
+  };
+
+  /*
+  * Handle common progress handling style changes.
+  *
+  *   Attach.progress(event);
+  */
+  Attach.progress = function(event) {
+    if (event.lengthComputable) {
+      var percentage = event.loaded / event.total;
+      $("#" + Attach.PROGRESS_BAR).width(percentage + "%");
+    }
+  };
+
+  /*
   * Handle errors that could have occured with the browser trying to read
   * the file.
   *
   *   Attach.readError(event);
   */
   Attach.readError = function(event) {
-    $("#" + Attach.PROGRESS_BAR).width("100%")
-      .css("background-color", "#FF3333")
-      .css("border-color", "#CC0033");
-    $("#" + Attach.PROGRESS_BAR_BG).css("background-image", "none");
+    Attach.error();
     $("#" + Attach.PROGRESS_EVENT).html("Error reading file");
   };
 
@@ -209,10 +231,7 @@ var Attach = {};
   *   Attach.readProgress(event);
   */
   Attach.readProgress = function(event) {
-    if (event.lengthComputable) {
-      var percentage = event.loaded / event.total;
-      $("#" + Attach.PROGRESS_BAR).width(percentage + "%");
-    }
+    Attach.progress(event);
   };
 
   /*
@@ -224,6 +243,18 @@ var Attach = {};
     $("#" + Attach.PROGRESS_BAR).width("100%");
     var uploader = new Attach.Uploader(event.target);
     uploader.send(new XMLHttpRequest());
+  };
+
+  /*
+  * Handle common success handling style changes.
+  *
+  *   Attach.success();
+  */
+  Attach.success = function() {
+    $("#" + Attach.PROGRESS_BAR).width("100%")
+      .css("background-color", "#00FF99")
+      .css("border-color", "#00CC33");
+    $("#" + Attach.PROGRESS_BAR_BG).css("background-image", "none");
   };
 
   /*
@@ -298,10 +329,7 @@ var Attach = {};
   *   Attach.sendError(event);
   */
   Attach.sendError = function(event) {
-    $("#" + Attach.PROGRESS_BAR).width("100%")
-      .css("background-color", "#FF3333")
-      .css("border-color", "#CC0033");
-    $("#" + Attach.PROGRESS_BAR_BG).css("background-image", "none");
+    Attach.error();
     $("#" + Attach.PROGRESS_EVENT).html("Error sending file");
   };
 
@@ -311,10 +339,7 @@ var Attach = {};
   *   Attach.sendProgress(event);
   */
   Attach.sendProgress = function(event) {
-    if (event.lengthComputable) {
-      var percentage = event.loaded / event.total;
-      $("#" + Attach.PROGRESS_BAR).width(percentage + "%");
-    }
+    Attach.progress(event);
   };
 
   /*
@@ -323,10 +348,7 @@ var Attach = {};
   *   Attach.sendSuccess(event);
   */
   Attach.sendSuccess = function(event) {
-    $("#" + Attach.PROGRESS_BAR).width("100%")
-      .css("background-color", "#00FF99")
-      .css("border-color", "#006633");
-    $("#" + Attach.PROGRESS_BAR_BG).css("background-image", "none");
+    Attach.success();
   };
 
   /*
