@@ -136,7 +136,6 @@ var Attach = {};
   *   reader.attachEvents(reader);
   */
   Attach.Reader.prototype.attachEvents = function(reader) {
-    reader.onprogress = Attach.readProgress;
     reader.onload = Attach.readSuccess;
     reader.onerror = Attach.readError;
   };
@@ -223,15 +222,6 @@ var Attach = {};
   Attach.readError = function(event) {
     Attach.error();
     $(Attach.PROGRESS_EVENT).html("Error reading file");
-  };
-
-  /*
-  * Show the progress of the file that is being read.
-  *
-  *   Attach.readProgress(event);
-  */
-  Attach.readProgress = function(event) {
-    Attach.progress(event);
   };
 
   /*
