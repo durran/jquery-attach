@@ -54,27 +54,27 @@ var Attach = {};
   /*
   * The id of the progress bar.
   */
-  Attach.PROGRESS_BAR = "jquery-attach-progress-bar";
+  Attach.PROGRESS_BAR = "#jquery-attach-progress-bar";
 
   /*
   * The id of the progress bar container.
   */
-  Attach.PROGRESS_BAR_CONTAINER = "jquery-attach-progress-bar-container";
+  Attach.PROGRESS_BAR_CONTAINER = "#jquery-attach-progress-bar-container";
 
   /*
   * The background div for the progress bar.
   */
-  Attach.PROGRESS_BAR_BG = "jquery-attach-progress-bar-background";
+  Attach.PROGRESS_BAR_BG = "#jquery-attach-progress-bar-background";
 
   /*
   * The id of the progress bar container div.
   */
-  Attach.PROGRESS_DIV = "jquery-attach-progress";
+  Attach.PROGRESS_DIV = "#jquery-attach-progress";
 
   /*
   * The id of the div for the current event that is processing.
   */
-  Attach.PROGRESS_EVENT = "jquery-attach-progress-event";
+  Attach.PROGRESS_EVENT = "#jquery-attach-progress-event";
 
   /*
   * Requested with header constant.
@@ -168,7 +168,7 @@ var Attach = {};
   Attach.Reader.prototype.read = function(reader) {
     reader.readAsBinaryString(this.file());
     this.attachEvents(reader);
-    $("#" + Attach.PROGRESS_EVENT).html("Reading: " + this.fileName());
+    $(Attach.PROGRESS_EVENT).html("Reading: " + this.fileName());
   };
 
   /*
@@ -186,7 +186,7 @@ var Attach = {};
   *   Attach.createProgressContainer();
   */
   Attach.createProgressContainer = function() {
-    $("#" + Attach.PROGRESS_DIV).remove();
+    $(Attach.PROGRESS_DIV).remove();
     $(":first :file").after(Attach.TEMPLATE);
   };
 
@@ -196,10 +196,10 @@ var Attach = {};
   *   Attach.error();
   */
   Attach.error = function() {
-    $("#" + Attach.PROGRESS_BAR).width("100%")
+    $(Attach.PROGRESS_BAR).width("100%")
       .css("background-color", "#FF3333")
       .css("border-color", "#CC0033");
-    $("#" + Attach.PROGRESS_BAR_BG).css("background-image", "none");
+    $(Attach.PROGRESS_BAR_BG).css("background-image", "none");
   };
 
   /*
@@ -210,7 +210,7 @@ var Attach = {};
   Attach.progress = function(event) {
     if (event.lengthComputable) {
       var percentage = event.loaded / event.total;
-      $("#" + Attach.PROGRESS_BAR).width(percentage + "%");
+      $(Attach.PROGRESS_BAR).width(percentage + "%");
     }
   };
 
@@ -222,7 +222,7 @@ var Attach = {};
   */
   Attach.readError = function(event) {
     Attach.error();
-    $("#" + Attach.PROGRESS_EVENT).html("Error reading file");
+    $(Attach.PROGRESS_EVENT).html("Error reading file");
   };
 
   /*
@@ -240,7 +240,7 @@ var Attach = {};
   *   Attach.readSuccess(event);
   */
   Attach.readSuccess = function(event) {
-    $("#" + Attach.PROGRESS_BAR).width("100%");
+    $(Attach.PROGRESS_BAR).width("100%");
     var uploader = new Attach.Uploader(event.target);
     uploader.send(new XMLHttpRequest());
   };
@@ -251,10 +251,10 @@ var Attach = {};
   *   Attach.success();
   */
   Attach.success = function() {
-    $("#" + Attach.PROGRESS_BAR).width("100%")
+    $(Attach.PROGRESS_BAR).width("100%")
       .css("background-color", "#00FF99")
       .css("border-color", "#00CC33");
-    $("#" + Attach.PROGRESS_BAR_BG).css("background-image", "none");
+    $(Attach.PROGRESS_BAR_BG).css("background-image", "none");
   };
 
   /*
@@ -318,7 +318,7 @@ var Attach = {};
   Attach.Uploader.prototype.send = function(request) {
     this.attachEvents(request);
     this.prepareRequest(request);
-    $("#" + Attach.PROGRESS_EVENT).html("Sending: " + this.fileName());
+    $(Attach.PROGRESS_EVENT).html("Sending: " + this.fileName());
     request.send(this.file());
   };
 
@@ -330,7 +330,7 @@ var Attach = {};
   */
   Attach.sendError = function(event) {
     Attach.error();
-    $("#" + Attach.PROGRESS_EVENT).html("Error sending file");
+    $(Attach.PROGRESS_EVENT).html("Error sending file");
   };
 
   /*
@@ -358,7 +358,7 @@ var Attach = {};
     if (this.readyState == this.DONE) {
       if (this.status == 200) {
         var response = JSON.parse(this.response);
-        $("#" + Attach.PROGRESS_EVENT).html("Success: " + response.filename);
+        $(Attach.PROGRESS_EVENT).html("Success: " + response.filename);
       }
     }
   };
