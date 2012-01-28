@@ -24,3 +24,11 @@ Requirements
 - JQuery 1.7.1+
 - Firefox 9
 - Chrome 16
+
+Usage
+=====
+Attach the functionality to a file form field.
+
+```javascript
+$("#upload").attach({ url: "/upload" });
+```
