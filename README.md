@@ -1,5 +1,5 @@
-Upload files using JQuery, the File API, and XMLHTTPRequests. This currently will
-only work in Firefox and Chrome.
+Upload files using JQuery, the File API, and XMLHttpRequests. This currently will
+only work in Firefox and Chrome, and provides accurate progress reporting.
 
 Development Setup
 =================
@@ -32,3 +32,7 @@ Attach the functionality to a file form field.
 ```javascript
 $("#upload").attach({ url: "/upload" });
 ```
+
+Download
+======
+[jquery.attach.js](http://github.com/durran/jquery-attach/blob/master/public/javascripts/jquery.attach.js)
