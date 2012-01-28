@@ -210,7 +210,7 @@ var Attach = {};
   Attach.progress = function(event) {
     if (event.lengthComputable) {
       var percentage = event.loaded / event.total;
-      $(Attach.PROGRESS_BAR).width(percentage + "%");
+      $(Attach.PROGRESS_BAR).width((percentage * 100) + "%");
     }
   };
 
